@@ -1,4 +1,3 @@
-```markdown
 # FastAPI QR Code Generator
 
 ![FastAPI Badge](https://img.shields.io/badge/FastAPI-0.68.0-blue.svg)
@@ -49,3 +48,4 @@ This will start the server, and you can access the application at [http://127.0.
 
 Feel free to contribute by opening issues or submitting pull requests.
 
+Thanks to Dear [Ali Abbasi](https://github.com/alieabbasi) for helping me in this project.
