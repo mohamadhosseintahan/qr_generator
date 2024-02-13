@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter text and submit</title>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100vw; height: 100vh; font-family: sans-serif; background-color: #333; color: white">
+<h1 style="margin-top: 0">Enter text and submit</h1>
+<form id="myForm" style="display: flex; flex-direction: column; width: 100%; max-width: 320px">
+    <input style="margin-bottom: 16px; background-color: white; padding: 8px; border-radius: 6px; border: none;" type="text" id="textInput" name="textInput" required>
+    <button style="width: 100%; background-color: darkgreen; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer" type="button" onclick="submitForm()">Submit</button>
+</form>
+</body>
+
+<script>
+    async function submitForm() {
+        const textInput = document.getElementById('textInput').value;
+        document.getElementById('textInput').value = null;
+        const response = await fetch('/api/send_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({textInput})
+        });
+        if (!response.ok) {
+            alert("Error: Bad Request");
+            return;
+        }
+        const result = await response.json();
+        const byteNumbers = atob(result.response); // convert base64 string to binary data
+        const arrayBuffer = new ArrayBuffer(byteNumbers.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteNumbers.length; i++) {
+            uint8Array[i] = byteNumbers.charCodeAt(i);
+        }
+        const blob = new Blob([uint8Array], {type: 'image/jpeg'}); // set appropriate MIME type here
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `${result.file_name}.jpg`; // set file name here
+        link.href = url;
+        link.click();
+        return false
+    }
+</script>
+</html>

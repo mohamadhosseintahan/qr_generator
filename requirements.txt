@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+Pillow
+jinja2
+qrcode
